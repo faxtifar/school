@@ -25,18 +25,29 @@ export const appRouter = router({
     create: protectedProcedure
       .input(
         z.object({
-          text: z.string().min(1).max(1000),
-          photoUrl: z.string().optional(),
-          photoKey: z.string().optional(),
+          text: z.string().max(5000).optional(),
+          attachments: z.array(
+            z.object({
+              fileUrl: z.string(),
+              fileKey: z.string(),
+              fileName: z.string(),
+              fileType: z.string(),
+              fileSize: z.number(),
+            })
+          ).optional(),
         })
       )
       .mutation(async ({ input, ctx }) => {
         if (!ctx.user) throw new Error("Not authenticated");
+        
+        if (!input.text && (!input.attachments || input.attachments.length === 0)) {
+          throw new Error("Message must have text or attachments");
+        }
+
         return await createMessage(
           ctx.user.id,
           input.text,
-          input.photoUrl,
-          input.photoKey
+          input.attachments
         );
       }),
     delete: protectedProcedure

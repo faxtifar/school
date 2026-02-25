@@ -7,7 +7,7 @@ import { registerOAuthRoutes } from "./oauth";
 import { appRouter } from "../routers";
 import { createContext } from "./context";
 import { serveStatic, setupVite } from "./vite";
-import { handleImageUpload } from "../upload";
+import { handleFileUpload } from "../file-upload";
 import multer from "multer";
 
 function isPortAvailable(port: number): Promise<boolean> {
@@ -38,8 +38,8 @@ async function startServer() {
   // Configure multer for file uploads
   const upload = multer({ storage: multer.memoryStorage() });
   
-  // Image upload endpoint
-  app.post("/api/upload", upload.single("file"), handleImageUpload);
+  // File upload endpoint
+  app.post("/api/upload", upload.single("file"), handleFileUpload);
   
   // OAuth callback under /api/oauth/callback
   registerOAuthRoutes(app);

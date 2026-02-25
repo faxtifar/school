@@ -1,6 +1,6 @@
 import { eq, desc } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { InsertUser, users, messages } from "../drizzle/schema";
+import { InsertUser, users, messages, messageAttachments } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -91,19 +91,31 @@ export async function getUserByOpenId(openId: string) {
 
 export async function createMessage(
   userId: number,
-  text: string,
-  photoUrl?: string,
-  photoKey?: string
+  text?: string,
+  attachments?: Array<{ fileUrl: string; fileKey: string; fileName: string; fileType: string; fileSize: number }>
 ) {
   const db = await getDb();
   if (!db) throw new Error("Database not available");
 
+  if (!text && (!attachments || attachments.length === 0)) {
+    throw new Error("Message must have text or attachments");
+  }
+
   const result = await db.insert(messages).values({
     userId,
-    text,
-    photoUrl: photoUrl || null,
-    photoKey: photoKey || null,
+    text: text || null,
   });
+
+  const messageId = result.insertId;
+
+  if (attachments && attachments.length > 0) {
+    await db.insert(messageAttachments).values(
+      attachments.map((att) => ({
+        messageId,
+        ...att,
+      }))
+    );
+  }
 
   return result;
 }
@@ -112,11 +124,10 @@ export async function listMessages(limit: number = 50) {
   const db = await getDb();
   if (!db) throw new Error("Database not available");
 
-  const result = await db
+  const messageList = await db
     .select({
       id: messages.id,
       text: messages.text,
-      photoUrl: messages.photoUrl,
       createdAt: messages.createdAt,
       author: {
         id: users.id,
@@ -128,12 +139,29 @@ export async function listMessages(limit: number = 50) {
     .orderBy(desc(messages.createdAt))
     .limit(limit);
 
-  return result;
+  // Get attachments for each message
+  const messagesWithAttachments = await Promise.all(
+    messageList.map(async (msg) => {
+      const attachs = await db
+        .select()
+        .from(messageAttachments)
+        .where(eq(messageAttachments.messageId, msg.id));
+      return {
+        ...msg,
+        attachments: attachs,
+      };
+    })
+  );
+
+  return messagesWithAttachments;
 }
 
 export async function deleteMessage(messageId: number) {
   const db = await getDb();
   if (!db) throw new Error("Database not available");
 
+  // Delete attachments first
+  await db.delete(messageAttachments).where(eq(messageAttachments.messageId, messageId));
+  
   return await db.delete(messages).where(eq(messages.id, messageId));
 }

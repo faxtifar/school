@@ -1,12 +1,11 @@
 import { useState } from "react";
-import CreateMessage from "./CreateMessage";
-import MessageBoard from "./MessageBoard";
+import CreatePost from "./CreatePost";
+import PostsFeed from "./PostsFeed";
 
 export default function Home() {
   const [refreshTrigger, setRefreshTrigger] = useState(0);
 
-  const handleMessageCreated = () => {
-    // Trigger message board refresh
+  const handlePostCreated = () => {
     setRefreshTrigger((prev) => prev + 1);
   };
 
@@ -15,31 +14,31 @@ export default function Home() {
       {/* Header */}
       <header className="border-b border-border bg-card sticky top-0 z-40">
         <div className="max-w-6xl mx-auto px-4 py-6">
-          <h1 className="text-3xl font-bold text-foreground">Message Board</h1>
+          <h1 className="text-3xl font-bold text-foreground">📚 School</h1>
           <p className="text-muted-foreground mt-1">
-            Share your thoughts with the community
+            Share messages, files, PDFs and photos with the community
           </p>
         </div>
       </header>
 
       {/* Main Content */}
-      <main className="max-w-6xl mx-auto px-4 py-8">
-        {/* Create Message Form */}
-        <CreateMessage onMessageCreated={handleMessageCreated} />
+      <main className="max-w-4xl mx-auto px-4 py-8">
+        {/* Create Post Form */}
+        <CreatePost onPostCreated={handlePostCreated} />
 
-        {/* Messages Grid */}
+        {/* Posts Feed */}
         <section>
           <h2 className="text-xl font-semibold text-foreground mb-6">
-            Recent Messages
+            Recent Posts
           </h2>
-          <MessageBoard refreshTrigger={refreshTrigger} />
+          <PostsFeed refreshTrigger={refreshTrigger} />
         </section>
       </main>
 
       {/* Footer */}
       <footer className="border-t border-border bg-card mt-16">
-        <div className="max-w-6xl mx-auto px-4 py-8 text-center text-sm text-muted-foreground">
-          <p>A simple message board for sharing thoughts and photos</p>
+        <div className="max-w-4xl mx-auto px-4 py-8 text-center text-sm text-muted-foreground">
+          <p>A community platform for sharing messages and files</p>
         </div>
       </footer>
     </div>
