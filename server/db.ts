@@ -1,6 +1,6 @@
-import { eq } from "drizzle-orm";
+import { eq, desc } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { InsertUser, users } from "../drizzle/schema";
+import { InsertUser, users, messages } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -89,4 +89,51 @@ export async function getUserByOpenId(openId: string) {
   return result.length > 0 ? result[0] : undefined;
 }
 
-// TODO: add feature queries here as your schema grows.
+export async function createMessage(
+  userId: number,
+  text: string,
+  photoUrl?: string,
+  photoKey?: string
+) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  const result = await db.insert(messages).values({
+    userId,
+    text,
+    photoUrl: photoUrl || null,
+    photoKey: photoKey || null,
+  });
+
+  return result;
+}
+
+export async function listMessages(limit: number = 50) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  const result = await db
+    .select({
+      id: messages.id,
+      text: messages.text,
+      photoUrl: messages.photoUrl,
+      createdAt: messages.createdAt,
+      author: {
+        id: users.id,
+        name: users.name,
+      },
+    })
+    .from(messages)
+    .innerJoin(users, eq(messages.userId, users.id))
+    .orderBy(desc(messages.createdAt))
+    .limit(limit);
+
+  return result;
+}
+
+export async function deleteMessage(messageId: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  return await db.delete(messages).where(eq(messages.id, messageId));
+}
