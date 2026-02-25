@@ -3,156 +3,392 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Публикации</title>
+    <title>School - Публикации</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
+        
         body {
             background-color: #0f172a;
             color: #f8fafc;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             padding: 20px;
         }
+        
         .container {
-            max-width: 1000px;
+            max-width: 1200px;
             margin: 0 auto;
         }
+        
+        header {
+            margin-bottom: 40px;
+            text-align: center;
+        }
+        
         h1 {
             font-size: 2.5rem;
             margin-bottom: 10px;
             color: #e0f2fe;
         }
+        
         .subtitle {
             color: #94a3b8;
-            margin-bottom: 40px;
             font-size: 1.1rem;
         }
-        .gallery {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            margin-bottom: 50px;
+        
+        .upload-section {
+            background-color: #1e293b;
+            border: 2px dashed #334155;
+            border-radius: 12px;
+            padding: 40px;
+            text-align: center;
+            margin-bottom: 40px;
+            cursor: pointer;
+            transition: all 0.3s;
         }
-        .photo-card {
+        
+        .upload-section:hover {
+            border-color: #475569;
+            background-color: #0f172a;
+        }
+        
+        .upload-section input[type="file"] {
+            display: none;
+        }
+        
+        .upload-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+        
+        .upload-text {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+        }
+        
+        .upload-hint {
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+        
+        .files-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        
+        .file-card {
             background-color: #1e293b;
             border: 1px solid #334155;
             border-radius: 8px;
             overflow: hidden;
-            transition: border-color 0.3s;
+            transition: all 0.3s;
         }
-        .photo-card:hover {
+        
+        .file-card:hover {
             border-color: #475569;
+            transform: translateY(-4px);
         }
-        .photo-card img {
+        
+        .file-preview {
             width: 100%;
-            height: auto;
-            display: block;
-        }
-        .photo-info {
-            padding: 15px;
-        }
-        .photo-info h3 {
-            font-size: 1.2rem;
-            margin-bottom: 8px;
-            color: #e0f2fe;
-        }
-        .photo-info p {
-            color: #cbd5e1;
-            font-size: 0.95rem;
-            line-height: 1.5;
-        }
-        .download-link {
-            display: inline-block;
-            margin-top: 10px;
-            color: #38bdf8;
-            text-decoration: none;
-            font-weight: 500;
-        }
-        .download-link:hover {
-            text-decoration: underline;
-        }
-        .files-section {
-            margin-top: 50px;
-            padding-top: 30px;
-            border-top: 1px solid #334155;
-        }
-        .files-section h2 {
-            font-size: 1.8rem;
-            margin-bottom: 20px;
-            color: #e0f2fe;
-        }
-        .file-list {
+            height: 150px;
+            background-color: #0f172a;
             display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-        .file-item {
-            background-color: #1e293b;
-            border: 1px solid #334155;
-            padding: 15px;
-            border-radius: 6px;
-            display: flex;
-            justify-content: space-between;
             align-items: center;
-            transition: border-color 0.3s;
+            justify-content: center;
+            font-size: 2rem;
+            overflow: hidden;
         }
-        .file-item:hover {
-            border-color: #475569;
+        
+        .file-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
+        
+        .file-info {
+            padding: 15px;
+        }
+        
         .file-name {
-            font-weight: 500;
+            font-weight: 600;
             color: #e0f2fe;
+            margin-bottom: 8px;
+            word-break: break-word;
+            font-size: 0.95rem;
         }
-        .file-link {
-            color: #38bdf8;
-            text-decoration: none;
+        
+        .file-size {
+            color: #94a3b8;
+            font-size: 0.85rem;
+            margin-bottom: 10px;
+        }
+        
+        .file-actions {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .btn {
+            flex: 1;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.85rem;
             font-weight: 500;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
         }
-        .file-link:hover {
-            text-decoration: underline;
+        
+        .btn-download {
+            background-color: #3b82f6;
+            color: white;
         }
+        
+        .btn-download:hover {
+            background-color: #2563eb;
+        }
+        
+        .btn-delete {
+            background-color: #ef4444;
+            color: white;
+        }
+        
+        .btn-delete:hover {
+            background-color: #dc2626;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #94a3b8;
+        }
+        
+        .empty-state-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+        
+        .empty-state-text {
+            font-size: 1.1rem;
+        }
+        
         footer {
-            margin-top: 60px;
-            padding-top: 30px;
-            border-top: 1px solid #334155;
             text-align: center;
             color: #64748b;
             font-size: 0.9rem;
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #334155;
+        }
+        
+        .success-message {
+            background-color: #10b981;
+            color: white;
+            padding: 12px 16px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        
+        .success-message.show {
+            display: block;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>📸 Публикации</h1>
-        <p class="subtitle">Фото и файлы для просмотра</p>
+        <header>
+            <h1>📚 School</h1>
+            <p class="subtitle">Публикуй файлы, сайты, PDF, фото и документы</p>
+        </header>
 
-        <div class="gallery">
-            <div class="photo-card">
-                <img src="photo.jpg" alt="Tag Questions">
-                <div class="photo-info">
-                    <h3>Tag Questions</h3>
-                    <p>Упражнение на английском языке по грамматике</p>
-                    <a href="photo.jpg" class="download-link" download>⬇️ Скачать</a>
-                </div>
-            </div>
+        <div class="success-message" id="successMessage">
+            ✓ Файл успешно загружен!
         </div>
 
-        <div class="files-section">
-            <h2>📄 Файлы</h2>
-            <div class="file-list">
-                <div class="file-item">
-                    <span class="file-name">README.md</span>
-                    <a href="README.md" class="file-link">Открыть →</a>
-                </div>
-            </div>
+        <div class="upload-section" id="uploadArea">
+            <input type="file" id="fileInput" multiple>
+            <div class="upload-icon">📤</div>
+            <div class="upload-text">Перетащи файлы сюда или нажми для загрузки</div>
+            <div class="upload-hint">Поддерживаются: изображения, PDF, документы, архивы и другие файлы</div>
         </div>
+
+        <div id="filesContainer"></div>
 
         <footer>
-            <p>Сайт для быстрого доступа к публикациям и файлам</p>
+            <p>Все файлы сохраняются локально в браузере</p>
         </footer>
     </div>
+
+    <script>
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const filesContainer = document.getElementById('filesContainer');
+        const successMessage = document.getElementById('successMessage');
+
+        // Get files from localStorage
+        function getFiles() {
+            const stored = localStorage.getItem('schoolFiles');
+            return stored ? JSON.parse(stored) : [];
+        }
+
+        // Save files to localStorage
+        function saveFiles(files) {
+            localStorage.setItem('schoolFiles', JSON.stringify(files));
+        }
+
+        // Format file size
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
+        }
+
+        // Get file icon based on type
+        function getFileIcon(file) {
+            const type = file.type || '';
+            const name = file.name || '';
+            
+            if (type.startsWith('image/')) return '🖼️';
+            if (type === 'application/pdf') return '📄';
+            if (type.includes('word') || name.endsWith('.doc') || name.endsWith('.docx')) return '📝';
+            if (type.includes('sheet') || name.endsWith('.xls') || name.endsWith('.xlsx')) return '📊';
+            if (type.includes('presentation') || name.endsWith('.ppt') || name.endsWith('.pptx')) return '🎯';
+            if (type.includes('zip') || type.includes('rar') || type.includes('7z')) return '📦';
+            if (type.includes('video/')) return '🎬';
+            if (type.includes('audio/')) return '🎵';
+            return '📄';
+        }
+
+        // Render files
+        function renderFiles() {
+            const files = getFiles();
+            filesContainer.innerHTML = '';
+
+            if (files.length === 0) {
+                filesContainer.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📭</div>
+                        <div class="empty-state-text">Нет файлов. Загрузи первый файл!</div>
+                    </div>
+                `;
+                return;
+            }
+
+            const grid = document.createElement('div');
+            grid.className = 'files-grid';
+
+            files.forEach((file, index) => {
+                const card = document.createElement('div');
+                card.className = 'file-card';
+
+                let preview = '';
+                if (file.type.startsWith('image/')) {
+                    preview = `<img src="${file.data}" alt="${file.name}">`;
+                } else {
+                    preview = `<div style="font-size: 3rem;">${getFileIcon(file)}</div>`;
+                }
+
+                card.innerHTML = `
+                    <div class="file-preview">${preview}</div>
+                    <div class="file-info">
+                        <div class="file-name">${file.name}</div>
+                        <div class="file-size">${formatFileSize(file.size)}</div>
+                        <div class="file-actions">
+                            <a href="${file.data}" download="${file.name}" class="btn btn-download">⬇️ Скачать</a>
+                            <button class="btn btn-delete" onclick="deleteFile(${index})">🗑️</button>
+                        </div>
+                    </div>
+                `;
+
+                grid.appendChild(card);
+            });
+
+            filesContainer.appendChild(grid);
+        }
+
+        // Delete file
+        window.deleteFile = function(index) {
+            const files = getFiles();
+            files.splice(index, 1);
+            saveFiles(files);
+            renderFiles();
+        };
+
+        // Handle file upload
+        function handleFiles(fileList) {
+            const files = getFiles();
+            
+            for (let file of fileList) {
+                // Limit file size to 50MB for localStorage
+                if (file.size > 50 * 1024 * 1024) {
+                    alert(`Файл "${file.name}" слишком большой (макс 50MB)`);
+                    continue;
+                }
+
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    files.push({
+                        name: file.name,
+                        type: file.type,
+                        size: file.size,
+                        data: e.target.result,
+                        uploadedAt: new Date().toLocaleString('ru-RU')
+                    });
+                    saveFiles(files);
+                    renderFiles();
+                    
+                    // Show success message
+                    successMessage.classList.add('show');
+                    setTimeout(() => {
+                        successMessage.classList.remove('show');
+                    }, 3000);
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Upload area click
+        uploadArea.addEventListener('click', () => fileInput.click());
+
+        // File input change
+        fileInput.addEventListener('change', (e) => {
+            handleFiles(e.target.files);
+            fileInput.value = '';
+        });
+
+        // Drag and drop
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.style.borderColor = '#38bdf8';
+            uploadArea.style.backgroundColor = '#1e293b';
+        });
+
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.style.borderColor = '#334155';
+            uploadArea.style.backgroundColor = '#1e293b';
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.style.borderColor = '#334155';
+            handleFiles(e.dataTransfer.files);
+        });
+
+        // Initial render
+        renderFiles();
+    </script>
 </body>
 </html>
