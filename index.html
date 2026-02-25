@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Публикации</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background-color: #0f172a;
+            color: #f8fafc;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: #e0f2fe;
+        }
+        .subtitle {
+            color: #94a3b8;
+            margin-bottom: 40px;
+            font-size: 1.1rem;
+        }
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+        .photo-card {
+            background-color: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: border-color 0.3s;
+        }
+        .photo-card:hover {
+            border-color: #475569;
+        }
+        .photo-card img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        .photo-info {
+            padding: 15px;
+        }
+        .photo-info h3 {
+            font-size: 1.2rem;
+            margin-bottom: 8px;
+            color: #e0f2fe;
+        }
+        .photo-info p {
+            color: #cbd5e1;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+        .download-link {
+            display: inline-block;
+            margin-top: 10px;
+            color: #38bdf8;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .download-link:hover {
+            text-decoration: underline;
+        }
+        .files-section {
+            margin-top: 50px;
+            padding-top: 30px;
+            border-top: 1px solid #334155;
+        }
+        .files-section h2 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: #e0f2fe;
+        }
+        .file-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .file-item {
+            background-color: #1e293b;
+            border: 1px solid #334155;
+            padding: 15px;
+            border-radius: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: border-color 0.3s;
+        }
+        .file-item:hover {
+            border-color: #475569;
+        }
+        .file-name {
+            font-weight: 500;
+            color: #e0f2fe;
+        }
+        .file-link {
+            color: #38bdf8;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .file-link:hover {
+            text-decoration: underline;
+        }
+        footer {
+            margin-top: 60px;
+            padding-top: 30px;
+            border-top: 1px solid #334155;
+            text-align: center;
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📸 Публикации</h1>
+        <p class="subtitle">Фото и файлы для просмотра</p>
+
+        <div class="gallery">
+            <div class="photo-card">
+                <img src="photo.jpg" alt="Tag Questions">
+                <div class="photo-info">
+                    <h3>Tag Questions</h3>
+                    <p>Упражнение на английском языке по грамматике</p>
+                    <a href="photo.jpg" class="download-link" download>⬇️ Скачать</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="files-section">
+            <h2>📄 Файлы</h2>
+            <div class="file-list">
+                <div class="file-item">
+                    <span class="file-name">README.md</span>
+                    <a href="README.md" class="file-link">Открыть →</a>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>Сайт для быстрого доступа к публикациям и файлам</p>
+        </footer>
+    </div>
+</body>
+</html>
