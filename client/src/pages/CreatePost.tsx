@@ -126,7 +126,23 @@ export default function CreatePost({ onPostCreated }: CreatePostProps) {
         </div>
 
         {/* File Upload Area */}
-        <div className="border-2 border-dashed border-border rounded-md p-4 text-center hover:border-border/80 transition-colors">
+        <div 
+          className="border-2 border-dashed border-border rounded-md p-4 text-center hover:border-border/80 transition-colors"
+          onDragOver={(e) => {
+            e.preventDefault();
+            e.currentTarget.style.borderColor = '#38bdf8';
+          }}
+          onDragLeave={(e) => {
+            e.currentTarget.style.borderColor = 'currentColor';
+          }}
+          onDrop={(e) => {
+            e.preventDefault();
+            e.currentTarget.style.borderColor = 'currentColor';
+            if (e.dataTransfer.files) {
+              handleFileSelect({ currentTarget: { files: e.dataTransfer.files } } as any);
+            }
+          }}
+        >
           <input
             type="file"
             id="file-input"
@@ -142,7 +158,7 @@ export default function CreatePost({ onPostCreated }: CreatePostProps) {
           >
             <Upload className="w-5 h-5 text-muted-foreground" />
             <span className="text-sm text-muted-foreground">
-              {isUploading ? "Uploading..." : "Click to add files or drag & drop"}
+              {isUploading ? "Uploading..." : "Tap to add files or drag & drop"}
             </span>
             <span className="text-xs text-muted-foreground">
               Images, PDF, Word, Excel, PowerPoint, ZIP, RAR (max 50MB each)
